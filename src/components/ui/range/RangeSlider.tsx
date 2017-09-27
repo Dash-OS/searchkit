@@ -1,68 +1,83 @@
-import * as React from "react";
+import * as React from 'react';
 
-import { RangeProps } from './RangeProps'
+import { RangeProps } from './RangeProps';
 
-import { identity } from "lodash"
-const Slider = require('rc-slider')
-const createSliderWithTooltip = Slider.createSliderWithTooltip
-const Range = createSliderWithTooltip(Slider.Range)
+import { identity } from 'lodash';
+const Slider = require('rc-slider');
+const createSliderWithTooltip = Slider.createSliderWithTooltip;
+const Range = createSliderWithTooltip(Slider.Range);
 
-let block = require("bem-cn")
-import { PureRender } from "../../../core/react/pure-render"
+let block = require('bem-cn');
+import { PureRender } from '../../../core/react/pure-render';
 
 export interface RangeSliderProps extends RangeProps {
-  step?: number
-  marks?: Object
-  rangeFormatter?:(n: number)=> number | string
+  step?: number;
+  marks?: Object;
+  rangeFormatter?: (n: number) => number | string;
 }
 
 @PureRender
 export class RangeSlider extends React.Component<RangeSliderProps, {}> {
-
   static defaultProps = {
-    mod: "sk-range-slider",
-    rangeFormatter:identity
-  }
+    mod: 'sk-range-slider',
+    rangeFormatter: identity,
+  };
 
-  constructor(props){
-    super(props)
-    this.onChange = this.onChange.bind(this)
-    this.onFinished = this.onFinished.bind(this)
+  constructor(props) {
+    super(props);
+    this.onChange = this.onChange.bind(this);
+    this.onFinished = this.onFinished.bind(this);
   }
 
   onChange([min, max]) {
-    this.props.onChange({ min, max })
+    this.props.onChange({ min, max });
   }
 
   onFinished([min, max]) {
-    this.props.onFinished({ min, max })
+    this.props.onFinished({ min, max });
   }
 
   render() {
-    const { mod, className, step, marks,rangeFormatter,
-      min, max, minValue, maxValue } = this.props
+    const {
+      mod,
+      className,
+      step,
+      marks,
+      rangeFormatter,
+      min,
+      max,
+      minValue,
+      maxValue,
+    } = this.props;
 
     const bemBlocks = {
-      container: block(mod)
-    }
+      container: block(mod),
+    };
 
     return (
-      <div className={bemBlocks.container().mix(className)}>
+      <div
+        className={bemBlocks
+          .container()
+          .mix(className)
+          .toString()}
+      >
         <Range
           min={min}
           max={max}
-          marks={marks || {
-            [min]: rangeFormatter(min),
-            [max]: rangeFormatter(max)
-          }}
+          marks={
+            marks || {
+              [min]: rangeFormatter(min),
+              [max]: rangeFormatter(max),
+            }
+          }
           tipFormatter={rangeFormatter}
           range={true}
           step={step}
           value={[minValue, maxValue]}
           onChange={this.onChange}
           onAfterChange={this.onFinished}
-          />
+        />
       </div>
-    )
+    );
   }
 }
